@@ -1,6 +1,6 @@
 CREATE TABLE positions (
     positionid SERIAL PRIMARY KEY,
-    position TEXT NOT NULL UNIQUE
+    name TEXT NOT NULL UNIQUE
 );
 
 CREATE TABLE users (

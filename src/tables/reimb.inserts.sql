@@ -1,4 +1,4 @@
-INSERT INTO positions (position)
+INSERT INTO positions (name)
 VALUES ('admin'), 
 ('finance_manager'), 
 ('employee');
