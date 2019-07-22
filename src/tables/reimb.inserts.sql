@@ -1,21 +1,21 @@
-INSERT INTO positions (name)
+INSERT INTO position (positionname)
 VALUES ('admin'), 
 ('finance_manager'), 
 ('employee');
 
-INSERT INTO reimbursementstatus (statusdesc)
+INSERT INTO reimbursementstatus (reimbstatus)
 VALUES ('pending'), 
 ('approved'),
 ('denied');
 
-INSERT INTO reimbursementtype (typeof)
+INSERT INTO reimbursementtype (reimbtype)
 VALUES ('lodging'),
 ('travel'),
 ('food'),
 ('other');
 
 INSERT INTO users (username, pass, 
-firstname, lastname, email, position)
+firstname, lastname, email, positionid)
 VALUES ('nepgear', 'password', 'brenton', 
 'byrd', 'fosterbyrdbrenton@gmail.com', 1),
 ('tjerry', 'password', 'tom', 'jerry',
@@ -25,9 +25,9 @@ VALUES ('nepgear', 'password', 'brenton',
 ('shrued', 'password', 'shane', 'dewgon',
 'shaneshrued@gmail.com', 3);
 
-INSERT INTO reimbursement (author, amount,
+INSERT INTO reimbursement (userid, amount,
 datesubmitted, dateresolved, resolver,
-reimbursementstatus, reimbursementtype)
+reimbstatusid, reimbtypeid)
 VALUES (2, 250,'2016-01-01', '2016-03-28',
 1, 2, 2),
 (3, 370, '2019-07-01', null, 1, 1, 3),

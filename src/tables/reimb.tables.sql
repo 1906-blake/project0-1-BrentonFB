@@ -1,6 +1,6 @@
-CREATE TABLE positions (
+CREATE TABLE position (
     positionid SERIAL PRIMARY KEY,
-    name TEXT NOT NULL UNIQUE
+    positionname TEXT NOT NULL UNIQUE
 );
 
 CREATE TABLE users (
@@ -10,26 +10,26 @@ CREATE TABLE users (
    firstname TEXT NOT NULL,
    lastname TEXT NOT NULL,
    email TEXT NOT NULL,
-   position INTEGER REFERENCES positions(positionid)
+   positionid INTEGER REFERENCES position(positionid)
 );
 
 CREATE TABLE reimbursementstatus (
-    statusid SERIAL PRIMARY KEY,
-    statusdesc TEXT NOT NULL UNIQUE
+    reimbstatusid SERIAL PRIMARY KEY,
+    reimbstatus TEXT NOT NULL UNIQUE
 );
 
 CREATE TABLE reimbursementtype (
-    typeid SERIAL PRIMARY KEY,
-    typeof TEXT NOT NULL UNIQUE
+    reimbtypeid SERIAL PRIMARY KEY,
+    reimbtype TEXT NOT NULL UNIQUE
 );
 
 CREATE TABLE reimbursement (
     reimbursementid SERIAL PRIMARY KEY,
-    author INTEGER REFERENCES users(userid),
+    userid INTEGER REFERENCES users(userid),
     amount NUMERIC (8,2),
     datesubmitted TIMESTAMP,
     dateresolved TIMESTAMP,
     resolver INTEGER REFERENCES users(userid),
-    reimbursementstatus INTEGER REFERENCES reimbursementstatus(statusid),
-    reimbursementtype INTEGER REFERENCES reimbursementtype(typeid)
+    reimbstatusid INTEGER REFERENCES reimbursementstatus(reimbstatusid),
+    reimbtypeid INTEGER REFERENCES reimbursementtype(reimbtypeid)
 );
