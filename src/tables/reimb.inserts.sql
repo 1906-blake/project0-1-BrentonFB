@@ -24,3 +24,11 @@ VALUES ('nepgear', 'password', 'brenton',
 'lagnation@gmail.com', 3),
 ('shrued', 'password', 'shane', 'dewgon',
 'shaneshrued@gmail.com', 3);
+
+INSERT INTO reimbursement (author, amount,
+datesubmitted, dateresolved, resolver,
+reimbursementstatus, reimbursementtype)
+VALUES (2, 250,'2016-01-01', '2016-03-28',
+1, 2, 2),
+(3, 370, '2019-07-01', null, 1, 1, 3),
+(4, 1500, '2018-03-12', '2018-03-25', 1, 3, 4);
