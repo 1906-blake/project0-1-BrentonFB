@@ -4,20 +4,39 @@ import { convertSqlUser } from '../util/user.converter';
 import User from '../models/user';
 
 
+// export async function findAll() {
+//     console.log('finding all users');
+//     let client: PoolClient;
+//     try {
+//         client = await connectionPool.connect(); // basically .then is everything after this
+//         const result = await client.query('SELECT * FROM app_user');
+//         // convert result from sql object to js object
+//         return result.rows.map(convertSqlUser);
+//     } catch (err) {
+//         console.log(err);
+//     } finally {
+//         client && client.release();
+//     }
+//     console.log('found all');
+//     return undefined;
+// }
+
 export async function findAll() {
-    console.log('finding all users');
+    console.log('finding users');
     let client: PoolClient;
     try {
-        client = await connectionPool.connect(); // basically .then is everything after this
-        const result = await client.query('SELECT * FROM app_user');
-        // convert result from sql object to js object
+        client = await connectionPool.connect();
+        const queryString = `
+        SELECT * FROM users
+        INNER JOIN position USING (positionid)`;
+        const result = await client.query(queryString);
         return result.rows.map(convertSqlUser);
     } catch (err) {
         console.log(err);
     } finally {
         client && client.release();
     }
-    console.log('found all');
+    console.log('found the users');
     return undefined;
 }
 
