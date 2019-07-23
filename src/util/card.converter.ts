@@ -28,3 +28,8 @@ export function cardConverter(row) {
         new ReimbursementStatus(row.reimbstatusid, row.reimbstatus),
         new ReimbursementType (row.reimbtypeid, row.reimbtype));
 }
+
+export function reimbConverter(row) {
+    return new Reimbursement(row.reimbursementid, row.userid, row.amount, row.datesubmitted,
+        row.dateresolved, row.resolver, row.reimbstatusid, row.reimbtypeid);
+}

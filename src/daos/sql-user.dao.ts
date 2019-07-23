@@ -127,7 +127,6 @@ export async function save(user: User) {
 }
 
 export async function update(user: Users) {
-    console.log(user.userId + ' it went through');
     const oldUser = await findById(user.userId);
     if (!oldUser) {
         return undefined;
