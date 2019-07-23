@@ -7,8 +7,8 @@ export default class Reimbursement {
         public reimbursementId = 0,
         public author: UserReimb,
         public amount = 0,
-        public dateSubmitted = 0,
-        public dateResolved = 0,
+        public dateSubmitted = '',
+        public dateResolved = '',
         public resolver: UserReimb,
         public status: ReimbursementStatus,
         public type: ReimbursementType

@@ -27,8 +27,8 @@ CREATE TABLE reimbursement (
     reimbursementid SERIAL PRIMARY KEY,
     userid INTEGER REFERENCES users(userid),
     amount NUMERIC (8,2),
-    datesubmitted TIMESTAMP,
-    dateresolved TIMESTAMP,
+    datesubmitted TEXT,
+    dateresolved TEXT,
     resolver INTEGER REFERENCES users(userid),
     reimbstatusid INTEGER REFERENCES reimbursementstatus(reimbstatusid),
     reimbtypeid INTEGER REFERENCES reimbursementtype(reimbtypeid)

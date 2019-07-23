@@ -16,9 +16,21 @@ cardsRouter.get('', async (req, res) => {
  * /cards
  * Find all cards by game
  */
-cardsRouter.get('/game/:gameId', async (req, res) => {
-    const gameId = +req.params.gameId;
-    const cards = await cardDao.findByGameId(gameId);
+// cardsRouter.get('/game/:gameId', async (req, res) => {
+//     const gameId = +req.params.gameId;
+//     const cards = await cardDao.findByGameId(gameId);
+//     res.json(cards);
+// });
+
+cardsRouter.get('/reimb/:reimbId', async (req, res) => {
+    const reimbId = +req.params.reimbId;
+    const cards = await cardDao.findByStatusId(reimbId);
+    res.json(cards);
+});
+
+cardsRouter.get('/reimb/author/:reimbId', async (req, res) => {
+    const reimbId = +req.params.reimbId;
+    const cards = await cardDao.findByAuthorId(reimbId);
     res.json(cards);
 });
 

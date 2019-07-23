@@ -2,6 +2,7 @@ import { connectionPool } from '../util/connection.util';
 import { PoolClient } from 'pg';
 import { convertSqlUser } from '../util/user.converter';
 import User from '../models/user';
+import Users from '../models/user.reimb';
 
 
 // export async function findAll() {
@@ -47,7 +48,7 @@ export async function findById(id: number) {
         client = await connectionPool.connect(); // basically .then is everything after this
         const result = await client.query(`
         SELECT * FROM users
-        INNER JOIN position USING (positionid)
+        INNER JOIN position p USING (positionid)
         WHERE userid = $1`, [id]);
         const sqlUser = result.rows[0];
         return sqlUser && convertSqlUser(sqlUser);
@@ -125,8 +126,9 @@ export async function save(user: User) {
     return undefined;
 }
 
-export async function update(user: User) {
-    const oldUser = await findById(user.id);
+export async function update(user: Users) {
+    console.log(user.userId + ' it went through');
+    const oldUser = await findById(user.userId);
     if (!oldUser) {
         return undefined;
     }
@@ -139,11 +141,11 @@ export async function update(user: User) {
     try {
         client = await connectionPool.connect(); // basically .then is everything after this
         const queryString = `
-            UPDATE app_user SET username = $1, pass = $2, first_name = $3, last_name = $4, phone = $5, email = $6, role = $7
-            WHERE user_id = $8
+            UPDATE users SET username = $1, pass = $2, firstname = $3, lastname = $4, email = $5, positionid = $6
+            WHERE userid = $7
             RETURNING *
         `;
-        const params = [user.username, user.password, user.firstName, user.lastName, user.phone, user.email, user.role, user.id];
+        const params = [user.username, user.pass, user.firstName, user.lastName, user.email, user.role, user.userId];
         const result = await client.query(queryString, params);
         const sqlUser = result.rows[0];
         return convertSqlUser(sqlUser);

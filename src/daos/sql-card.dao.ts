@@ -47,6 +47,60 @@ export async function findByGameId(gameId: number) {
     return undefined;
 }
 
+export async function findByStatusId(gameId: number) {
+    let client: PoolClient;
+    try {
+        client = await connectionPool.connect(); // basically .then is everything after this
+        const queryString = `
+        SELECT * FROM reimbursement a
+        LEFT JOIN resolverview r
+        ON (a.resolver = r.ruserid)
+        LEFT JOIN authorview b
+        ON (a.userid = b.auserid)
+        LEFT JOIN reimbursementstatus
+        USING (reimbstatusid)
+        LEFT JOIN reimbursementtype
+        USING (reimbtypeid)
+        WHERE reimbstatusid = $1`;
+        const result = await client.query(queryString, [gameId]);
+        // convert result from sql object to js object
+        return result.rows.map(cardConverter);
+    } catch (err) {
+        console.log(err);
+    } finally {
+        client && client.release();
+    }
+    console.log('found all');
+    return undefined;
+}
+
+export async function findByAuthorId(gameId: number) {
+    let client: PoolClient;
+    try {
+        client = await connectionPool.connect(); // basically .then is everything after this
+        const queryString = `
+        SELECT * FROM reimbursement a
+        LEFT JOIN resolverview r
+        ON (a.resolver = r.ruserid)
+        LEFT JOIN authorview b
+        ON (a.userid = b.auserid)
+        LEFT JOIN reimbursementstatus
+        USING (reimbstatusid)
+        LEFT JOIN reimbursementtype
+        USING (reimbtypeid)
+        WHERE auserid = $1;`;
+        const result = await client.query(queryString, [gameId]);
+        // convert result from sql object to js object
+        return result.rows.map(cardConverter);
+    } catch (err) {
+        console.log(err);
+    } finally {
+        client && client.release();
+    }
+    console.log('found all');
+    return undefined;
+}
+
 
 export async function save(card: Card) {
     let client: PoolClient;

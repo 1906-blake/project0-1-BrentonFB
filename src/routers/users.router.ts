@@ -39,52 +39,55 @@ usersRouter.get('/:id', async (req, res) => {
 /**
  * /users/firstName/:firstName
  */
-usersRouter.get('/firstName/:firstName', async (req, res) => {
-    const firstName = req.params.firstName;
-    const users = await userDao.findByFirstName(firstName);
-    res.json(users);
-});
+// usersRouter.get('/firstName/:firstName', async (req, res) => {
+//     const firstName = req.params.firstName;
+//     const users = await userDao.findByFirstName(firstName);
+//     res.json(users);
+// });
 
 /**
  * /users
  * create new user resource
  */
-usersRouter.post('', async (req, res) => {
-    const user = req.body;
-    if (!user) {
-        res.sendStatus(400);
-    } else {
-        const id = await userDao.save(user);
-        if (!id) {
-            res.sendStatus(400);
-        } else {
-            user.id = id;
-            res.status(201); // created status code
-            res.json(user);
-        }
-    }
-});
+// usersRouter.post('', async (req, res) => {
+//     const user = req.body;
+//     if (!user) {
+//         res.sendStatus(400);
+//     } else {
+//         const id = await userDao.save(user);
+//         if (!id) {
+//             res.sendStatus(400);
+//         } else {
+//             user.id = id;
+//             res.status(201); // created status code
+//             res.json(user);
+//         }
+//     }
+// });
 
 /**
  * /users
  * partially update user resource
  */
 usersRouter.patch('', async (req, res) => {
-    const userId = req.body.id;
-    const currentLoggedInUser = req.session.user;
-    if (currentLoggedInUser && currentLoggedInUser.id === userId) {
+    console.log('beginning patch');
+    const userId = req.body.userid;
+    console.log(userId);
+    // const currentLoggedInUser = req.session.user;
+    // console.log(currentLoggedInUser);
+    // if (currentLoggedInUser && currentLoggedInUser.id === userId) {
         const updatedUser = await userDao.update(req.body);
         res.json(updatedUser);
-    } else {
-        res.sendStatus(403);
-    }
+    // } else {
+    //     res.sendStatus(403);
+    // }
 });
 
 /**
  * /users
  * delete user by id
  */
-usersRouter.delete('/:id', (req, res) => {
-    // userDao.deleteUser(+req.params.id);
-    res.end();
-});
+// usersRouter.delete('/:id', (req, res) => {
+//     // userDao.deleteUser(+req.params.id);
+//     res.end();
+// });
