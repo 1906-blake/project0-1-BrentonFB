@@ -129,6 +129,36 @@ export async function findByReimbId(gameId: number) {
     return undefined;
 }
 
+export async function update(card: Reimbursement) {
+    const oldReimb = await findByReimbId(card.reimbursementId);
+    if (!oldReimb) {
+        return undefined;
+    }
+    card = {
+        ...oldReimb,
+        ...card
+    };
+    let client: PoolClient;
+    try {
+        client = await connectionPool.connect();
+        const queryString = `
+            UPDATE reimbursement SET userid = $1, amount = $2,
+            datesubmitted = $3, dateresolved = $4, resolver = $5,
+            reimbstatusid = $6, reimbtypeid = $7
+            RETURNING reimbursementid;
+        `;
+        const params = [card.author, card.amount, card.dateSubmitted, card.dateResolved, card.resolver,
+        card.status, card.type];
+        const result = await client.query(queryString, params);
+        return result.rows[0].reimbursementid;
+    } catch (err) {
+        console.log(err);
+    } finally {
+        client && client.release();
+    }
+    return undefined;
+}
+
 
 export async function save(card: Reimbursement) {
     let client: PoolClient;

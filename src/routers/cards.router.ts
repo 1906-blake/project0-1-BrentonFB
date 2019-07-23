@@ -101,8 +101,13 @@ cardsRouter.post('', async (req, res) => {
  * /cards
  * partially update card resource
  */
-cardsRouter.patch('', (req, res) => {
-    res.send(`updating card: ${JSON.stringify(req.body)}`);
+cardsRouter.patch('', async (req, res) => {
+
+    const updatedConst = await cardDao.update(req.body);
+    const reimbs = await cardDao.findByReimbId(updatedConst);
+    res.json(reimbs);
+
+    // res.send(`updating card: ${JSON.stringify(req.body)}`);
 });
 
 /**
