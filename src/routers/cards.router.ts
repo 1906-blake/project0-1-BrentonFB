@@ -64,6 +64,22 @@ cardsRouter.get('/owner/:ownerId', (req, res) => {
  * /cards
  * create new card resource
  */
+// cardsRouter.post('', async (req, res) => {
+//     const card = req.body;
+//     if (!card) {
+//         res.sendStatus(400);
+//     } else {
+//         const id = await cardDao.save(card);
+//         if (!id) {
+//             res.sendStatus(400);
+//         } else {
+//             card.id = id;
+//             res.status(201); // created status code
+//             res.json(card);
+//         }
+//     }
+// });
+
 cardsRouter.post('', async (req, res) => {
     const card = req.body;
     if (!card) {
@@ -75,7 +91,8 @@ cardsRouter.post('', async (req, res) => {
         } else {
             card.id = id;
             res.status(201); // created status code
-            res.json(card);
+            const cards = await cardDao.findByReimbId(card.id);
+            res.json(cards);
         }
     }
 });

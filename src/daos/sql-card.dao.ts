@@ -1,7 +1,8 @@
 import { PoolClient } from 'pg';
 import { connectionPool } from '../util/connection.util'
 import { cardConverter } from '../util/card.converter';
-import Card from '../models/card';
+// import Card from '../models/card';
+import Reimbursement from '../models/reimbursement';
 
 
 export async function findAll() {
@@ -101,19 +102,56 @@ export async function findByAuthorId(gameId: number) {
     return undefined;
 }
 
-
-export async function save(card: Card) {
+export async function findByReimbId(gameId: number) {
     let client: PoolClient;
     try {
         client = await connectionPool.connect(); // basically .then is everything after this
         const queryString = `
-            INSERT INTO card (card_name, card_value, game_id, quality_id, user_id)
-            VALUES 	($1, $2, $3, $4, $5)
-            RETURNING card_id
+        SELECT * FROM reimbursement a
+        LEFT JOIN resolverview r
+        ON (a.resolver = r.ruserid)
+        LEFT JOIN authorview b
+        ON (a.userid = b.auserid)
+        LEFT JOIN reimbursementstatus
+        USING (reimbstatusid)
+        LEFT JOIN reimbursementtype
+        USING (reimbtypeid)
+        WHERE reimbursementid = $1`;
+        const result = await client.query(queryString, [gameId]);
+        // convert result from sql object to js object
+        return result.rows.map(cardConverter);
+    } catch (err) {
+        console.log(err);
+    } finally {
+        client && client.release();
+    }
+    console.log('found all');
+    return undefined;
+}
+
+
+export async function save(card: Reimbursement) {
+    let client: PoolClient;
+    console.log('connected to the save function');
+    try {
+        client = await connectionPool.connect(); // basically .then is everything after this
+
+        const queryString = `
+        INSERT INTO reimbursement (userid, amount,
+            datesubmitted, dateresolved, resolver,
+            reimbstatusid, reimbtypeid)
+            VALUES ($1, $2, $3, $4, $5, $6, $7)
+            RETURNING reimbursementid
         `;
-        const params = [card.name, card.value, card.game && card.game.id, card.quality && card.quality.id, card.owner && card.owner.id];
+        console.log('query went through');
+        const params = [card.author, card.amount, card.dateSubmitted, card.dateResolved, card.resolver,
+             card.status, card.type];
+             console.log('params went through');
         const result = await client.query(queryString, params);
-        return result.rows[0].card_id;
+        console.log('merged both of them');
+        console.log('returned the updated id');
+        return result.rows[0].reimbursementid;
+
     } catch (err) {
         console.log(err);
     } finally {
