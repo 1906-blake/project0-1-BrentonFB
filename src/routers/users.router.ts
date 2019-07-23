@@ -17,15 +17,15 @@ export const usersRouter = express.Router();
 //         res.json(users);
 //     }]);
 
-    // usersRouter.get('', async (req, res) => {
-    //         const users = await userDao.findAll();
-    //         res.json(users);
-    //     });
+// usersRouter.get('', async (req, res) => {
+//         const users = await userDao.findAll();
+//         res.json(users);
+//     });
 
-        usersRouter.get('', async (req, res) => {
-            const users = await userDao.findAll();
-            res.json(users);
-        });
+usersRouter.get('', async (req, res) => {
+    const users = await userDao.findAll();
+    res.json(users);
+});
 
 /**
  * /users/:id
