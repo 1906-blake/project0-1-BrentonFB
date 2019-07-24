@@ -1,26 +1,7 @@
 import { connectionPool } from '../util/connection.util';
 import { PoolClient } from 'pg';
 import { convertSqlUser } from '../util/user.converter';
-import User from '../models/user';
 import Users from '../models/user.reimb';
-
-
-// export async function findAll() {
-//     console.log('finding all users');
-//     let client: PoolClient;
-//     try {
-//         client = await connectionPool.connect(); // basically .then is everything after this
-//         const result = await client.query('SELECT * FROM app_user');
-//         // convert result from sql object to js object
-//         return result.rows.map(convertSqlUser);
-//     } catch (err) {
-//         console.log(err);
-//     } finally {
-//         client && client.release();
-//     }
-//     console.log('found all');
-//     return undefined;
-// }
 
 export async function findAll() {
     console.log('finding users');
@@ -76,8 +57,6 @@ export async function findByFirstName(firstName: string) {
     return undefined;
 }
 
-
-
 export async function findByUsernameAndPassword(username: string, password: string) {
     let client: PoolClient;
     try {
@@ -91,7 +70,7 @@ export async function findByUsernameAndPassword(username: string, password: stri
 
         // instead there is a built in way of handling this to prevent sql injection
         const queryString = `
-            SELECT * FROM app_user
+            SELECT * FROM users
                 WHERE username = $1 AND pass = $2
         `;
         const result = await client.query(queryString, [username, password]);
@@ -102,27 +81,6 @@ export async function findByUsernameAndPassword(username: string, password: stri
     } finally {
         client && client.release();
     }
-    return undefined;
-}
-
-export async function save(user: User) {
-    let client: PoolClient;
-    try {
-        client = await connectionPool.connect(); // basically .then is everything after this
-        const queryString = `
-            INSERT INTO app_user (username, pass, first_name, last_name, phone, email, role)
-            VALUES 	($1, $2, $3, $4, $5, $6, $7)
-            RETURNING user_id
-        `;
-        const params = [user.username, user.password, user.firstName, user.lastName, user.phone, user.email, user.role];
-        const result = await client.query(queryString, params);
-        return result.rows[0].user_id;
-    } catch (err) {
-        console.log(err);
-    } finally {
-        client && client.release();
-    }
-    console.log('found all');
     return undefined;
 }
 
@@ -142,12 +100,11 @@ export async function update(user: Users) {
         const queryString = `
             UPDATE users SET username = $1, pass = $2, firstname = $3, lastname = $4, email = $5, positionid = $6
             WHERE userid = $7
-            RETURNING *
+            RETURNING userid
         `;
         const params = [user.username, user.pass, user.firstName, user.lastName, user.email, user.role, user.userId];
         const result = await client.query(queryString, params);
-        const sqlUser = result.rows[0];
-        return convertSqlUser(sqlUser);
+        return result.rows[0].userid;
     } catch (err) {
         console.log(err);
     } finally {
