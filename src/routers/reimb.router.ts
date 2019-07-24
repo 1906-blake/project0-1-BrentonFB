@@ -1,24 +1,24 @@
 import express from 'express';
-import * as cardDao from '../daos/sql-reimb.dao';
+import * as reimbDao from '../daos/sql-reimb.dao';
 
-export const cardsRouter = express.Router();
+export const reimbRouter = express.Router();
 
 /**
  * /reimb
  * Getting reimbursements from status id
  */
-cardsRouter.get('/reimb/:reimbId', async (req, res) => {
+reimbRouter.get('/reimb/:reimbId', async (req, res) => {
     const reimbId = +req.params.reimbId;
-    const cards = await cardDao.findByStatusId(reimbId);
+    const cards = await reimbDao.findByStatusId(reimbId);
     res.json(cards);
 });
 /**
  * /reimb
  * getting reimbursements from author id
  */
-cardsRouter.get('/reimb/author/:reimbId', async (req, res) => {
+reimbRouter.get('/reimb/author/:reimbId', async (req, res) => {
     const reimbId = +req.params.reimbId;
-    const cards = await cardDao.findByAuthorId(reimbId);
+    const cards = await reimbDao.findByAuthorId(reimbId);
     res.json(cards);
 });
 
@@ -26,18 +26,18 @@ cardsRouter.get('/reimb/author/:reimbId', async (req, res) => {
  * /reimb
  * adding a reimbursement to the table
  */
-cardsRouter.post('', async (req, res) => {
+reimbRouter.post('', async (req, res) => {
     const card = req.body;
     if (!card) {
         res.sendStatus(400);
     } else {
-        const id = await cardDao.save(card);
+        const id = await reimbDao.save(card);
         if (!id) {
             res.sendStatus(400);
         } else {
             card.id = id;
             res.status(201); // created status code
-            const cards = await cardDao.findByReimbId(card.id);
+            const cards = await reimbDao.findByReimbId(card.id);
             res.json(cards);
         }
     }
@@ -47,9 +47,9 @@ cardsRouter.post('', async (req, res) => {
  * /reimb
  * partially update a reimbursement
  */
-cardsRouter.patch('', async (req, res) => {
+reimbRouter.patch('', async (req, res) => {
 
-    const updatedConst = await cardDao.update(req.body);
-    const reimbs = await cardDao.findByReimbId(updatedConst);
+    const updatedConst = await reimbDao.update(req.body);
+    const reimbs = await reimbDao.findByReimbId(updatedConst);
     res.json(reimbs);
 });
