@@ -62,19 +62,12 @@ export async function findByUsernameAndPassword(username: string, password: stri
     try {
         client = await connectionPool.connect();
 
-        // it is bad to use interpolation here because it allows sql injection
-        // const queryString = `
-        //     SELECT * FROM app_user
-        //         WHERE username = '${username}' AND pass = '${password}'
-        // `;
-
-        // instead there is a built in way of handling this to prevent sql injection
         const queryString = `
             SELECT * FROM users
                 WHERE username = $1 AND pass = $2
         `;
         const result = await client.query(queryString, [username, password]);
-        const sqlUser = result.rows[0]; // there should really only be 1 row at best
+        const sqlUser = result.rows[0];
         return sqlUser && convertSqlUser(sqlUser);
     } catch (err) {
         console.log(err);
