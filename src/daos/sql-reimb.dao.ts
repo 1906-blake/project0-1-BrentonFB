@@ -1,52 +1,8 @@
 import { PoolClient } from 'pg';
-import { connectionPool } from '../util/connection.util'
-import { cardConverter } from '../util/card.converter';
-// import Card from '../models/card';
+import { connectionPool } from '../util/connection.util';
+import { reimbConverter } from '../util/reimb.converter';
 import Reimbursement from '../models/reimbursement';
 
-
-export async function findAll() {
-    let client: PoolClient;
-    try {
-        client = await connectionPool.connect(); // basically .then is everything after this
-        const queryString = `
-        SELECT * FROM card
-        LEFT JOIN app_user USING (user_id)
-        INNER JOIN quality USING (quality_id)
-        INNER JOIN game USING (game_id)`;
-        const result = await client.query(queryString);
-        // convert result from sql object to js object
-        return result.rows.map(cardConverter);
-    } catch (err) {
-        console.log(err);
-    } finally {
-        client && client.release();
-    }
-    console.log('found all');
-    return undefined;
-}
-
-export async function findByGameId(gameId: number) {
-    let client: PoolClient;
-    try {
-        client = await connectionPool.connect(); // basically .then is everything after this
-        const queryString = `
-        SELECT * FROM card
-        LEFT JOIN app_user USING (user_id)
-        INNER JOIN quality USING (quality_id)
-        INNER JOIN game USING (game_id)
-        WHERE game_id = $1`;
-        const result = await client.query(queryString, [gameId]);
-        // convert result from sql object to js object
-        return result.rows.map(cardConverter);
-    } catch (err) {
-        console.log(err);
-    } finally {
-        client && client.release();
-    }
-    console.log('found all');
-    return undefined;
-}
 
 export async function findByStatusId(gameId: number) {
     let client: PoolClient;
@@ -65,7 +21,7 @@ export async function findByStatusId(gameId: number) {
         WHERE reimbstatusid = $1`;
         const result = await client.query(queryString, [gameId]);
         // convert result from sql object to js object
-        return result.rows.map(cardConverter);
+        return result.rows.map(reimbConverter);
     } catch (err) {
         console.log(err);
     } finally {
@@ -92,7 +48,7 @@ export async function findByAuthorId(gameId: number) {
         WHERE auserid = $1;`;
         const result = await client.query(queryString, [gameId]);
         // convert result from sql object to js object
-        return result.rows.map(cardConverter);
+        return result.rows.map(reimbConverter);
     } catch (err) {
         console.log(err);
     } finally {
@@ -119,7 +75,7 @@ export async function findByReimbId(gameId: number) {
         WHERE reimbursementid = $1`;
         const result = await client.query(queryString, [gameId]);
         // convert result from sql object to js object
-        return result.rows.map(cardConverter);
+        return result.rows.map(reimbConverter);
     } catch (err) {
         console.log(err);
     } finally {
@@ -158,7 +114,6 @@ export async function update(card: Reimbursement) {
     }
     return undefined;
 }
-
 
 export async function save(card: Reimbursement) {
     let client: PoolClient;

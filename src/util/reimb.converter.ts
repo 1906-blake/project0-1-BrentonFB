@@ -19,7 +19,7 @@ import UserReimb from '../models/user.reimb';
 
 
 
-export function cardConverter(row) {
+export function reimbConverter(row) {
 
     return new Reimbursement(row.reimbursementid, new UserReimb(row.auserid, row.ausername,
         row.apass, row.afirstname, row.alastname, row.aemail, row.apositionid), row.amount,
@@ -27,9 +27,4 @@ export function cardConverter(row) {
         row.rfirstname, row.rlastname, row.remail, row.rpositionid),
         new ReimbursementStatus(row.reimbstatusid, row.reimbstatus),
         new ReimbursementType (row.reimbtypeid, row.reimbtype));
-}
-
-export function reimbConverter(row) {
-    return new Reimbursement(row.reimbursementid, row.userid, row.amount, row.datesubmitted,
-        row.dateresolved, row.resolver, row.reimbstatusid, row.reimbtypeid);
 }

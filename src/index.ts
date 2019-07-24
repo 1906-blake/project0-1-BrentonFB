@@ -1,7 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import { usersRouter } from './routers/users.router';
-import { cardsRouter } from './routers/cards.router';
+import { cardsRouter } from './routers/reimb.router';
 import { sessionMiddleware } from './middleware/session.middleware';
 import { authRouter } from './routers/auth.router';
 
@@ -31,7 +31,7 @@ app.use(sessionMiddleware);
  * Register Routers
  ******************************************/
 app.use('/users', usersRouter);
-app.use('/cards', cardsRouter);
+app.use('/reimb', cardsRouter);
 app.use(authRouter);
 
 app.listen(port, () => {
