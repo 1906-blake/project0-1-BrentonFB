@@ -86,7 +86,8 @@ export async function findByReimbId(gameId: number) {
 }
 
 export async function update(card: Reimbursement) {
-    const oldReimb = await findByReimbId(card.reimbursementId);
+    console.log(card.reimbursementid);
+    const oldReimb = await findByReimbId(card.reimbursementid);
     if (!oldReimb) {
         return undefined;
     }
@@ -101,10 +102,11 @@ export async function update(card: Reimbursement) {
             UPDATE reimbursement SET userid = $1, amount = $2,
             datesubmitted = $3, dateresolved = $4, resolver = $5,
             reimbstatusid = $6, reimbtypeid = $7
+            WHERE reimbursementid = $8
             RETURNING reimbursementid;
         `;
         const params = [card.author, card.amount, card.dateSubmitted, card.dateResolved, card.resolver,
-        card.status, card.type];
+        card.status, card.type, card.reimbursementid];
         const result = await client.query(queryString, params);
         return result.rows[0].reimbursementid;
     } catch (err) {
@@ -128,13 +130,9 @@ export async function save(card: Reimbursement) {
             VALUES ($1, $2, $3, $4, $5, $6, $7)
             RETURNING reimbursementid
         `;
-        console.log('query went through');
         const params = [card.author, card.amount, card.dateSubmitted, card.dateResolved, card.resolver,
              card.status, card.type];
-             console.log('params went through');
         const result = await client.query(queryString, params);
-        console.log('merged both of them');
-        console.log('returned the updated id');
         return result.rows[0].reimbursementid;
 
     } catch (err) {

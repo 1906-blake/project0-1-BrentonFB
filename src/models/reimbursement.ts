@@ -4,7 +4,7 @@ import UserReimb from './user.reimb';
 
 export default class Reimbursement {
     constructor(
-        public reimbursementId = 0,
+        public reimbursementid = 0,
         public author: UserReimb,
         public amount = 0,
         public dateSubmitted = '',

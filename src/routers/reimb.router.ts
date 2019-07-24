@@ -48,8 +48,25 @@ reimbRouter.post('', async (req, res) => {
  * partially update a reimbursement
  */
 reimbRouter.patch('', async (req, res) => {
+    const card = req.body;
+    console.log(card);
+    if (!card) {
+        res.sendStatus(400);
+    } else {
+        console.log('sending to update');
+        const id = await reimbDao.update(card);
+        if (!id) {
+            res.sendStatus(400);
+        } else {
+            card.id = id;
+            res.status(201);
+            console.log('sending to the find by id');
+            const cards = await reimbDao.findByReimbId(card.id);
+            res.json(cards);
+        }
+    }
 
-    const updatedConst = await reimbDao.update(req.body);
-    const reimbs = await reimbDao.findByReimbId(updatedConst);
-    res.json(reimbs);
+    // const updatedConst = await reimbDao.update(req.body);
+    // const reimbs = await reimbDao.findByReimbId(updatedConst);
+    // res.json(reimbs);
 });
