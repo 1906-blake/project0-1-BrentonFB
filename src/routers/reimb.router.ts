@@ -4,13 +4,22 @@ import * as reimbDao from '../daos/sql-reimb.dao';
 export const reimbRouter = express.Router();
 
 /**
+ * Getting all reimbursements
+ */
+reimbRouter.get('', async (req, res) => {
+    const reimbs = await reimbDao.findAllReimbs();
+    res.json(reimbs);
+    console.log('found all reimbs');
+});
+
+/**
  * /reimb
  * Getting reimbursements from status id
  */
 reimbRouter.get('/reimb/:reimbId', async (req, res) => {
     const reimbId = +req.params.reimbId;
-    const cards = await reimbDao.findByStatusId(reimbId);
-    res.json(cards);
+    const reimbs = await reimbDao.findByStatusId(reimbId);
+    res.json(reimbs);
 });
 /**
  * /reimb
@@ -18,8 +27,8 @@ reimbRouter.get('/reimb/:reimbId', async (req, res) => {
  */
 reimbRouter.get('/reimb/author/:reimbId', async (req, res) => {
     const reimbId = +req.params.reimbId;
-    const cards = await reimbDao.findByAuthorId(reimbId);
-    res.json(cards);
+    const reimbs = await reimbDao.findByAuthorId(reimbId);
+    res.json(reimbs);
 });
 
 /**
@@ -37,8 +46,8 @@ reimbRouter.post('', async (req, res) => {
         } else {
             card.id = id;
             res.status(201); // created status code
-            const cards = await reimbDao.findByReimbId(card.id);
-            res.json(cards);
+            const reimbs = await reimbDao.findByReimbId(card.id);
+            res.json(reimbs);
         }
     }
 });
@@ -61,8 +70,8 @@ reimbRouter.patch('', async (req, res) => {
             card.id = id;
             res.status(201);
             console.log('sending to the find by id');
-            const cards = await reimbDao.findByReimbId(card.id);
-            res.json(cards);
+            const reimbs = await reimbDao.findByReimbId(card.id);
+            res.json(reimbs);
         }
     }
 

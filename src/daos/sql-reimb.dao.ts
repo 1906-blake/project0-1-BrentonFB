@@ -4,7 +4,7 @@ import { reimbConverter } from '../util/reimb.converter';
 import Reimbursement from '../models/reimbursement';
 
 
-export async function findAllReimbs(gameId: number) {
+export async function findAllReimbs() {
     let client: PoolClient;
     try {
         client = await connectionPool.connect(); // basically .then is everything after this
@@ -19,8 +19,10 @@ export async function findAllReimbs(gameId: number) {
         LEFT JOIN reimbursementtype
         USING (reimbtypeid)
         ORDER BY datesubmitted;`;
-        const result = await client.query(queryString, [gameId]);
+        console.log('query set');
+        const result = await client.query(queryString);
         // convert result from sql object to js object
+        console.log('went to the converter');
         return result.rows.map(reimbConverter);
     } catch (err) {
         console.log(err);
