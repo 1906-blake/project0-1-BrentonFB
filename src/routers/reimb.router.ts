@@ -4,6 +4,7 @@ import * as reimbDao from '../daos/sql-reimb.dao';
 export const reimbRouter = express.Router();
 
 /**
+ * /reimb
  * Getting all reimbursements
  */
 reimbRouter.get('', async (req, res) => {
@@ -13,7 +14,7 @@ reimbRouter.get('', async (req, res) => {
 });
 
 /**
- * /reimb
+ * /reimb/reimb/:ID
  * Getting reimbursements from status id
  */
 reimbRouter.get('/reimb/:reimbId', async (req, res) => {
@@ -22,7 +23,7 @@ reimbRouter.get('/reimb/:reimbId', async (req, res) => {
     res.json(reimbs);
 });
 /**
- * /reimb
+ * /reimb/reimb/author/:ID
  * getting reimbursements from author id
  */
 reimbRouter.get('/reimb/author/:reimbId', async (req, res) => {
