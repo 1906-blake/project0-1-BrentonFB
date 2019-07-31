@@ -20,5 +20,6 @@ authRouter.post('/login', async (req, res) => {
 
 
 authRouter.get('/check-session', (req, res) => {
+    console.log(req.session);
     res.json(req.session);
 });
