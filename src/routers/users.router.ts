@@ -11,7 +11,7 @@ export const usersRouter = express.Router();
  * find all users
  */
 usersRouter.get('', [
-    authMiddleware('admin', 'manager'),
+    authMiddleware(1, 2),
     async (req, res) => {
         const users = await userDao.findAll();
         res.json(users);

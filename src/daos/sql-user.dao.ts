@@ -64,7 +64,9 @@ export async function findByUsernameAndPassword(username: string, password: stri
 
         const queryString = `
             SELECT * FROM users
-                WHERE username = $1 AND pass = $2
+            JOIN position
+            USING (positionid)
+            WHERE username = $1 AND pass = $2
         `;
         const result = await client.query(queryString, [username, password]);
         const sqlUser = result.rows[0];
