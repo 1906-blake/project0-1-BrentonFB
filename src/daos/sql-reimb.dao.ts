@@ -4,6 +4,33 @@ import { reimbConverter } from '../util/reimb.converter';
 import Reimbursement from '../models/reimbursement';
 
 
+export async function findAllReimbs(gameId: number) {
+    let client: PoolClient;
+    try {
+        client = await connectionPool.connect(); // basically .then is everything after this
+        const queryString = `
+        SELECT * FROM reimbursement a
+        LEFT JOIN resolverview r
+        ON (a.resolver = r.ruserid)
+        LEFT JOIN authorview b
+        ON (a.userid = b.auserid)
+        LEFT JOIN reimbursementstatus
+        USING (reimbstatusid)
+        LEFT JOIN reimbursementtype
+        USING (reimbtypeid)
+        ORDER BY datesubmitted;`;
+        const result = await client.query(queryString, [gameId]);
+        // convert result from sql object to js object
+        return result.rows.map(reimbConverter);
+    } catch (err) {
+        console.log(err);
+    } finally {
+        client && client.release();
+    }
+    console.log('found all');
+    return undefined;
+}
+
 export async function findByStatusId(gameId: number) {
     let client: PoolClient;
     try {
@@ -18,7 +45,8 @@ export async function findByStatusId(gameId: number) {
         USING (reimbstatusid)
         LEFT JOIN reimbursementtype
         USING (reimbtypeid)
-        WHERE reimbstatusid = $1`;
+        WHERE reimbstatusid = $1
+        ORDER BY datesubmitted;`;
         const result = await client.query(queryString, [gameId]);
         // convert result from sql object to js object
         return result.rows.map(reimbConverter);
@@ -45,7 +73,8 @@ export async function findByAuthorId(gameId: number) {
         USING (reimbstatusid)
         LEFT JOIN reimbursementtype
         USING (reimbtypeid)
-        WHERE auserid = $1;`;
+        WHERE auserid = $1
+        ORDER BY datesubmitted;`;
         const result = await client.query(queryString, [gameId]);
         // convert result from sql object to js object
         return result.rows.map(reimbConverter);
@@ -72,7 +101,8 @@ export async function findByReimbId(gameId: number) {
         USING (reimbstatusid)
         LEFT JOIN reimbursementtype
         USING (reimbtypeid)
-        WHERE reimbursementid = $1`;
+        WHERE reimbursementid = $1
+        ORDER BY datesubmitted;`;
         const result = await client.query(queryString, [gameId]);
         // convert result from sql object to js object
         return result.rows.map(reimbConverter);
@@ -128,7 +158,7 @@ export async function save(card: Reimbursement) {
             datesubmitted, dateresolved, resolver,
             reimbstatusid, reimbtypeid)
             VALUES ($1, $2, $3, $4, $5, $6, $7)
-            RETURNING reimbursementid
+            RETURNING reimbursementid;
         `;
         const params = [card.author, card.amount, card.dateSubmitted, card.dateResolved, card.resolver,
              card.status, card.type];
