@@ -23,11 +23,7 @@
  * @param roles
  */
 export const authMiddleware = (...roles) => (req, res, next) => {
-    console.log(req.session + ' this is the session');
-    console.log(req.session.user + ' is the session user');
-    console.log(req.session.user.role + 'is the session user role');
-    console.log(req.session.user.role.roleId + 'is the one after the role');
-    if (req.session.user) {
+    if (req.session.user && req.session.user.role.roleId) {
         if (roles.includes(req.session.user.role.roleId)) {
             next();
         } else {
