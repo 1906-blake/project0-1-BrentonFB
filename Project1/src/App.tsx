@@ -1,5 +1,5 @@
 import React from 'react';
-import './App.css';
+import './App.scss';
 import { FirstComponent } from './components/first/first.component';
 import Second from './components/second/second.component';
 import Third from './components/third/third.component';
@@ -14,7 +14,6 @@ import { Pokemon } from './components/pokemon/pokemon.component';
 import { Nested } from './components/nested/nested.component';
 import { SignIn } from './components/sign-in/sign-in.component';
 import Cards from './components/cards/cards.component';
-import Reimbursements from './project-1/components/reimbursements/reimbursements.components';
 
 const App: React.FC = () => {
   return (
@@ -34,7 +33,6 @@ const App: React.FC = () => {
           <Route path="/pokemon" component={Pokemon} />
           <Route path="/sign-in" component={SignIn} />
           <Route path="/tic-tac-toe" component={TicTacToe} />
-          <Route path="/reimbursements" component={Reimbursements} />
           <Route component={NotFound} />
         </Switch>
       </div>
