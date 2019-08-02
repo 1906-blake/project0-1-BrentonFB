@@ -21,12 +21,11 @@ usersRouter.get('', [
  * /users/:id
  * find user by user id
  */
-usersRouter.get('/:id', [
-    authMiddleware(1, 2),
+usersRouter.get('/:id',
     async (req, res) => {
     const user = await userDao.findById(+req.params.id);
     res.json(user);
-}]);
+});
 
 
 /**
