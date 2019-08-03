@@ -51,10 +51,33 @@ usersRouter.get('/:id',
  * partially update user resource
  */
 usersRouter.patch('', async (req, res) => {
-    console.log('beginning patch');
-    const userId = req.body.userid;
-    console.log(userId);
-        const updatedUser = await userDao.update(req.body);
-        const user = await userDao.findById(updatedUser);
-        res.json(user);
+    if (req.session.user && req.session.user.role.roleId) {
+        if (req.session.user.role.roleId === 1) {
+            const updatedUser = await userDao.update(req.body);
+            const user = await userDao.findById(updatedUser);
+            res.json(user);
+        } else {
+            if (req.session.user.userId) {
+                if (req.session.user.userId === +req.body.userId) {
+                    const updatedUser = await userDao.update(req.body);
+                    const user = await userDao.findById(updatedUser);
+                    res.json(user);
+                } else {
+                // 403 means forbidden which means we know who they are
+                // they just don't have the right access
+                res.status(403);
+                res.send('Permission Denied');
+                }
+            } else {
+                // 403 means forbidden which means we know who they are
+                // they just don't have the right access
+                res.status(403);
+                res.send('Permission Denied');
+            }
+        }
+    } else {
+        // 401 is Unauthorized which really means Unauthenticated
+        // they don't have access because we don't know who they are
+        res.sendStatus(401);
+    }
 });
