@@ -23,8 +23,26 @@ usersRouter.get('', [
  */
 usersRouter.get('/:id',
     async (req, res) => {
-    const user = await userDao.findById(+req.params.id);
-    res.json(user);
+        if (req.session.user && req.session.user.role.roleId) {
+            if (req.session.user.role.roleId === 1) {
+                const user = await userDao.findById(+req.params.id);
+                 res.json(user);
+            } else {
+                if (req.session.user.userId && req.session.user.userId === +req.params.id) {
+                    const user = await userDao.findById(+req.params.id);
+                    res.json(user);
+                } else {
+                    // 403 means forbidden which means we know who they are
+                    // they just don't have the right access
+                    res.status(403);
+                    res.send('Permission Denied');
+                }
+            }
+        } else {
+            // 401 is Unauthorized which really means Unauthenticated
+            // they don't have access because we don't know who they are
+            res.sendStatus(401);
+        }
 });
 
 
