@@ -13,7 +13,6 @@ reimbRouter.get('', [
     async (req, res) => {
     const reimbs = await reimbDao.findAllReimbs();
     res.json(reimbs);
-    console.log('found all reimbs');
 }]);
 
 /**

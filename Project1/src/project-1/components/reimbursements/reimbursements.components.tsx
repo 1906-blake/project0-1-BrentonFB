@@ -14,13 +14,16 @@ export default class Reimbursements extends Component<{}, IState> {
     }
 
     async componentDidMount() {
-        const resp = await fetch('http://localhost:8012/reimb/reimb/1');
+        console.log('i mounted');
+        const resp = await fetch('http://localhost:8012/reimb/', {
+            credentials: 'include'
+        });
         const reimbsFromServer = await resp.json();
         this.setState({
             reimbs: reimbsFromServer
         });
         console.log(reimbsFromServer);
-    }
+    };
 
     render() {
         const reimbs = this.state.reimbs;
