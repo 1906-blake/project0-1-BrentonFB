@@ -15,6 +15,11 @@ reimbRouter.get('', [
     res.json(reimbs);
 }]);
 
+reimbRouter.get('/status', async (req, res) => {
+    const stati = await reimbDao.findAllStatuses();
+    res.json(stati);
+});
+
 /**
  * /reimb/reimb/:ID
  * Getting reimbursements from status id

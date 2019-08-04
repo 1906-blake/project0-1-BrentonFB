@@ -2,6 +2,7 @@ import { PoolClient } from 'pg';
 import { connectionPool } from '../util/connection.util';
 import { reimbConverter } from '../util/reimb.converter';
 import Reimbursement from '../models/reimbursement';
+import { statusConverter } from '../util/status.converter';
 
 
 export async function findAllReimbs() {
@@ -167,6 +168,23 @@ export async function save(card: Reimbursement) {
         const result = await client.query(queryString, params);
         return result.rows[0].reimbursementid;
 
+    } catch (err) {
+        console.log(err);
+    } finally {
+        client && client.release();
+    }
+    return undefined;
+}
+
+export async function findAllStatuses() {
+    let client: PoolClient;
+    try {
+        client = await connectionPool.connect(); // basically .then is everything after this
+        const queryString = `
+        SELECT reimbstatus FROM reimbursementstatus
+        ORDER BY reimbstatusid`;
+        const result = await client.query(queryString);
+        return result.rows.map(statusConverter);
     } catch (err) {
         console.log(err);
     } finally {
