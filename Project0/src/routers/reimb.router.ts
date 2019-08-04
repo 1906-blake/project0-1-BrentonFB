@@ -1,5 +1,6 @@
 import express from 'express';
 import * as reimbDao from '../daos/sql-reimb.dao';
+import { authMiddleware } from '../middleware/auth.middleware';
 
 export const reimbRouter = express.Router();
 
@@ -7,11 +8,13 @@ export const reimbRouter = express.Router();
  * /reimb
  * Getting all reimbursements
  */
-reimbRouter.get('', async (req, res) => {
+reimbRouter.get('', [
+    authMiddleware(2),
+    async (req, res) => {
     const reimbs = await reimbDao.findAllReimbs();
     res.json(reimbs);
     console.log('found all reimbs');
-});
+}]);
 
 /**
  * /reimb/reimb/:ID
@@ -59,7 +62,6 @@ reimbRouter.post('', async (req, res) => {
  */
 reimbRouter.patch('', async (req, res) => {
     const card = req.body;
-    console.log(card);
     if (!card) {
         res.sendStatus(400);
     } else {
@@ -70,13 +72,8 @@ reimbRouter.patch('', async (req, res) => {
         } else {
             card.id = id;
             res.status(201);
-            console.log('sending to the find by id');
             const reimbs = await reimbDao.findByReimbId(card.id);
             res.json(reimbs);
         }
     }
-
-    // const updatedConst = await reimbDao.update(req.body);
-    // const reimbs = await reimbDao.findByReimbId(updatedConst);
-    // res.json(reimbs);
 });
