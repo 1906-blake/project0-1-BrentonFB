@@ -86,7 +86,9 @@ reimbRouter.post('', async (req, res) => {
  * /reimb
  * partially update a reimbursement
  */
-reimbRouter.patch('', async (req, res) => {
+reimbRouter.patch('', [
+    authMiddleware(2),
+    async (req, res) => {
     const card = req.body;
     if (!card) {
         res.sendStatus(400);
@@ -102,4 +104,4 @@ reimbRouter.patch('', async (req, res) => {
             res.json(reimbs);
         }
     }
-});
+}]);
