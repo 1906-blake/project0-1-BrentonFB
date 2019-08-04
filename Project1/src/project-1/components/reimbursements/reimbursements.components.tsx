@@ -14,7 +14,6 @@ export default class Reimbursements extends Component<{}, IState> {
     }
 
     async componentDidMount() {
-        console.log('i mounted');
         const resp = await fetch('http://localhost:8012/reimb/', {
             credentials: 'include'
         });
@@ -22,7 +21,6 @@ export default class Reimbursements extends Component<{}, IState> {
         this.setState({
             reimbs: reimbsFromServer
         });
-        console.log(reimbsFromServer);
     };
 
     render() {
