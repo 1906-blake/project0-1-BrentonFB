@@ -32,33 +32,40 @@ reimbRouter.get('/reimb/:statusId', [
  * getting reimbursements from author id
  */
 reimbRouter.get('/reimb/author/:reimbId', async (req, res) => {
-    if (req.session.user && req.session.user.role.roleId) {
-        if (req.session.user.role.roleId === 1) {
-            const reimbId = +req.params.reimbId;
-            const reimbs = await reimbDao.findByAuthorId(reimbId);
-            res.json(reimbs);
-        } else if (req.session.user.role.roleId === 2) {
-            const reimbId = +req.params.reimbId;
-            const reimbs = await reimbDao.findByAuthorId(reimbId);
-            res.json(reimbs);
-        } else {
-            if (req.session.user.userId && req.session.user.userId === +req.params.reimbId) {
-                const reimbId = +req.params.reimbId;
+    if (req.session.user) {
+        if (+req.params.reimbId === 0) {
+                const reimbId = req.session.user.userId;
                 const reimbs = await reimbDao.findByAuthorId(reimbId);
                 res.json(reimbs);
+        } else {
+            if (req.session.user.role.roleId) {
+                if (req.session.user.role.roleId === 1) {
+                    const reimbId = +req.params.reimbId;
+                    const reimbs = await reimbDao.findByAuthorId(reimbId);
+                    res.json(reimbs);
+                } else if (req.session.user.role.roleId === 2) {
+                    const reimbId = +req.params.reimbId;
+                    const reimbs = await reimbDao.findByAuthorId(reimbId);
+                    res.json(reimbs);
+                } else {
+                    if (req.session.user.userId === +req.params.reimbId) {
+                        const reimbId = +req.params.reimbId;
+                        const reimbs = await reimbDao.findByAuthorId(reimbId);
+                        res.json(reimbs);
+                    } else {
+                        // 403 means forbidden which means we know who they are
+                        res.status(403);
+                        res.send('Permission Denied');
+                    }
+                }
             } else {
-                // 403 means forbidden which means we know who they are
-                res.status(403);
-                res.send('Permission Denied');
+                // 401 is Unauthorized which really means Unauthenticated
+                res.sendStatus(401);
             }
         }
     } else {
-        // 401 is Unauthorized which really means Unauthenticated
         res.sendStatus(401);
     }
-    const reimbId = +req.params.reimbId;
-    const reimbs = await reimbDao.findByAuthorId(reimbId);
-    res.json(reimbs);
 });
 
 /**
