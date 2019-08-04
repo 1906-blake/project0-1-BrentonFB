@@ -12,8 +12,8 @@ export const authMiddleware = (...roles) => (req, res, next) => {
             } else {
                 // 403 means forbidden which means we know who they are
                 // they just don't have the right access
-                res.status(403);
-                res.send('Permission Denied');
+                res.sendStatus(403);
+                // res.send('Permission Denied');
             }
         }
     } else {
