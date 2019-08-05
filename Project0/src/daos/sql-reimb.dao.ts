@@ -181,7 +181,7 @@ export async function findAllStatuses() {
     try {
         client = await connectionPool.connect(); // basically .then is everything after this
         const queryString = `
-        SELECT reimbstatus FROM reimbursementstatus
+        SELECT * FROM reimbursementstatus
         ORDER BY reimbstatusid`;
         const result = await client.query(queryString);
         return result.rows.map(statusConverter);

@@ -1,6 +1,6 @@
-import { Status } from '../models/status';
+import { ReimbursementStatus } from '../models/reimb.status';
 
 
 export function statusConverter(row) {
-    return new Status(row.reimbstatus);
+    return new ReimbursementStatus(row.reimbstatusid, row.reimbstatus);
 }

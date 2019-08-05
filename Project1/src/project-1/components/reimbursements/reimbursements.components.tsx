@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import Reimbursement from '../../models/reimbursement';
 import { environment } from '../../../environment';
-import { Status } from '../../models/status';
 import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { ReimbursementStatus } from '../../models/reimb.status';
 
 interface IState {
     reimbs: Reimbursement[],
-    status: Status[],
+    status: ReimbursementStatus[],
     statusDropdown: {
         isOpen: boolean,
         selection: string
@@ -28,6 +28,7 @@ export default class Reimbursements extends Component<{}, IState> {
 
     async componentDidMount() {
         this.getReimbursements();
+        this.getStatus();
     };
 
     getReimbursements = async () => {
@@ -45,7 +46,26 @@ export default class Reimbursements extends Component<{}, IState> {
     }
 
     getStatus = async () => {
-        
+        const resp = await fetch(environment.context + '/reimb/status');
+        const status = await resp.json();
+        this.setState({
+            status
+        });
+        console.log(status);
+    }
+
+    getReimbursementsByStatus = async (status: ReimbursementStatus) => {
+        const resp = await fetch(environment.context + '/reimb/reimb/' + status.statusId, {
+            credentials: 'include'
+        });
+        const reimbsFromServer = await resp.json();
+        this.setState({
+            reimbs: reimbsFromServer,
+            statusDropdown: {
+                ...this.state.statusDropdown,
+                selection: status.status
+            }
+        })
     }
 
     toggleStatusDropdown = () => {
@@ -70,6 +90,14 @@ export default class Reimbursements extends Component<{}, IState> {
                         <DropdownMenu right>
                             <DropdownItem onClick={this.getReimbursements}>All</DropdownItem>
                             <DropdownItem divider />
+                            {
+                                this.state.status.map(status => (
+                                    <DropdownItem key={'status-dropdown-' + status.statusId}
+                                    onClick={() => this.getReimbursementsByStatus(status)}>
+                                        {status.status}
+                                    </DropdownItem>
+                                ))
+                            }
                         </DropdownMenu>
                     </ButtonDropdown>
                 <table className="table table-striped table-dark">
