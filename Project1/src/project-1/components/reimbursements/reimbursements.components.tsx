@@ -21,13 +21,13 @@ export default class Reimbursements extends Component<{}, IState> {
             status: [],
             statusDropdown: {
                 isOpen: false,
-                selection: 'All'
+                selection: 'My Reimbs'
             }
         };
     }
 
     async componentDidMount() {
-        this.getReimbursements();
+        this.getMyReimbursements();
         this.getStatus();
     };
 
@@ -41,6 +41,20 @@ export default class Reimbursements extends Component<{}, IState> {
             statusDropdown: {
                 ...this.state.statusDropdown,
                 selection: 'All'
+            }
+        });
+    }
+
+    getMyReimbursements = async () => {
+        const resp = await fetch(environment.context + '/reimb/reimb/author/0', {
+            credentials: 'include'
+        });
+        const reimbsFromServer = await resp.json();
+        this.setState({
+            reimbs: reimbsFromServer,
+            statusDropdown: {
+                ...this.state.statusDropdown,
+                selection: 'My Reimbursements'
             }
         });
     }
@@ -88,8 +102,9 @@ export default class Reimbursements extends Component<{}, IState> {
                             {this.state.statusDropdown.selection}
                         </DropdownToggle>
                         <DropdownMenu right>
-                            <DropdownItem onClick={this.getReimbursements}>All</DropdownItem>
+                            <DropdownItem onClick={this.getMyReimbursements}>My Reimbursements</DropdownItem>
                             <DropdownItem divider />
+                            <DropdownItem onClick={this.getReimbursements}>All</DropdownItem>
                             {
                                 this.state.status.map(status => (
                                     <DropdownItem key={'status-dropdown-' + status.statusId}
