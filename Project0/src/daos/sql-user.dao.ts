@@ -108,3 +108,33 @@ export async function update(user: Users) {
     console.log('found all');
     return undefined;
 }
+
+export async function updateMyself(user: Partial<Users>) {
+    const oldUser = await findById(user.userId);
+    if (!oldUser) {
+        return undefined;
+    }
+    user = {
+        ...oldUser,
+        ...user
+    };
+    console.log(user);
+    let client: PoolClient;
+    try {
+        client = await connectionPool.connect(); // basically .then is everything after this
+        const queryString = `
+            UPDATE users SET username = $1, pass = $2, firstname = $3, lastname = $4, email = $5, positionid = $6
+            WHERE userid = $7
+            RETURNING userid
+        `;
+        const params = [user.username, user.pass, user.firstName, user.lastName, user.email, user.role, user.userId];
+        const result = await client.query(queryString, params);
+        return result.rows[0].userid;
+    } catch (err) {
+        console.log(err);
+    } finally {
+        client && client.release();
+    }
+    console.log('found all');
+    return undefined;
+}
