@@ -1,6 +1,6 @@
 import React from 'react';
 
-export class FirstComponent extends React.Component {
+export class PatchReimbs extends React.Component {
 
     render() {
         return (

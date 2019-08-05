@@ -15,6 +15,9 @@ import { Nested } from './components/nested/nested.component';
 import { SignIn } from './components/sign-in/sign-in.component';
 import Cards from './components/cards/cards.component';
 import Reimbursements from './project-1/components/reimbursements/reimbursements.components';
+import { PostReimbs } from './project-1/components/post-reimbursements/post.reimbs';
+import { PatchReimbs } from './project-1/components/update-reimbs/update.reimbursement';
+import { PatchUser } from './project-1/components/update-user/update.user';
 
 const App: React.FC = () => {
   return (
@@ -24,7 +27,9 @@ const App: React.FC = () => {
         {/* The switch will only render the first route to match */}
         <Switch>
           <Route path="/reimbursements" component={Reimbursements} />
-          
+          <Route path="/post-reimbs" component={PostReimbs} />
+          <Route path="/update-reimbs" component={PatchReimbs} />
+          <Route path="/update-user" component={PatchUser} />
           <Route path="/second" component={Second} />
           <Route path="/third" component={Third} />
           <Route path="/cards" component={Cards} />

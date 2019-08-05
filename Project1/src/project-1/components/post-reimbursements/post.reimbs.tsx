@@ -1,6 +1,6 @@
 import React from 'react';
 
-export class FirstComponent extends React.Component {
+export class PostReimbs extends React.Component {
 
     render() {
         return (
