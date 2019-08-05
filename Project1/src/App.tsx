@@ -23,7 +23,8 @@ const App: React.FC = () => {
         <NavComponent />
         {/* The switch will only render the first route to match */}
         <Switch>
-          <Route path="/first" component={FirstComponent} />
+          <Route path="/reimbursements" component={Reimbursements} />
+          
           <Route path="/second" component={Second} />
           <Route path="/third" component={Third} />
           <Route path="/cards" component={Cards} />
@@ -34,7 +35,7 @@ const App: React.FC = () => {
           <Route path="/pokemon" component={Pokemon} />
           <Route path="/sign-in" component={SignIn} />
           <Route path="/tic-tac-toe" component={TicTacToe} />
-          <Route path="/reimbursements" component={Reimbursements} />
+          <Route path="/first" component={FirstComponent} />
           <Route component={NotFound} />
         </Switch>
       </div>
