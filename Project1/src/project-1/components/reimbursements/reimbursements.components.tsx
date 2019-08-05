@@ -1,32 +1,77 @@
 import React, { Component } from 'react';
 import Reimbursement from '../../models/reimbursement';
+import { environment } from '../../../environment';
+import { Status } from '../../models/status';
+import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
 interface IState {
-    reimbs: Reimbursement[];
+    reimbs: Reimbursement[],
+    status: Status[],
+    statusDropdown: {
+        isOpen: boolean,
+        selection: string
+    }
 }
 
 export default class Reimbursements extends Component<{}, IState> {
     constructor(props: any) {
         super(props);
         this.state = {
-            reimbs: []
+            reimbs: [],
+            status: [],
+            statusDropdown: {
+                isOpen: false,
+                selection: 'All'
+            }
         };
     }
 
     async componentDidMount() {
-        const resp = await fetch('http://localhost:8012/reimb/', {
+        this.getReimbursements();
+    };
+
+    getReimbursements = async () => {
+        const resp = await fetch(environment.context +'/reimb/', {
             credentials: 'include'
         });
         const reimbsFromServer = await resp.json();
         this.setState({
-            reimbs: reimbsFromServer
+            reimbs: reimbsFromServer,
+            statusDropdown: {
+                ...this.state.statusDropdown,
+                selection: 'All'
+            }
         });
-    };
+    }
+
+    getStatus = async () => {
+        
+    }
+
+    toggleStatusDropdown = () => {
+        this.setState({
+            statusDropdown: {
+                ...this.state.statusDropdown,
+                isOpen: !this.state.statusDropdown.isOpen
+            }
+        })
+    }
 
     render() {
         const reimbs = this.state.reimbs;
         return(
             <div id="reimb-table-container">
+                <ButtonDropdown id="reimb-status-dropdown"
+                    isOpen={this.state.statusDropdown.isOpen}
+                    toggle={this.toggleStatusDropdown}>
+                        <DropdownToggle caret>
+                            {this.state.statusDropdown.selection}
+                        </DropdownToggle>
+                        <DropdownMenu right>
+                            <DropdownItem onClick={this.getReimbursements}>All</DropdownItem>
+                            <DropdownItem divider />
+                        </DropdownMenu>
+                    </ButtonDropdown>
                 <table className="table table-striped table-dark">
                     <thead>
                         <tr>
