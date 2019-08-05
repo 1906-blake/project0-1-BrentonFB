@@ -150,6 +150,36 @@ export async function update(card: Reimbursement) {
     return undefined;
 }
 
+export async function updatePartialReimb(card: Partial<Reimbursement>) {
+    const oldReimb = await findByReimbId(card.reimbursementid);
+    if (!oldReimb) {
+        return undefined;
+    }
+    card = {
+        ...oldReimb,
+        ...card
+    };
+    let client: PoolClient;
+    try {
+        client = await connectionPool.connect();
+        const queryString = `
+            UPDATE reimbursement SET dateresolved = $1, resolver = $2,
+            reimbstatusid = $3
+            WHERE reimbursementid = $4
+            RETURNING reimbursementid;
+        `;
+        const params = [card.dateResolved, card.resolver,
+        card.status, card.reimbursementid];
+        const result = await client.query(queryString, params);
+        return result.rows[0].reimbursementid;
+    } catch (err) {
+        console.log(err);
+    } finally {
+        client && client.release();
+    }
+    return undefined;
+}
+
 export async function save(card: Reimbursement) {
     let client: PoolClient;
     console.log('connected to the save function');

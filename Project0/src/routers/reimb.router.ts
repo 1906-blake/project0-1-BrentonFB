@@ -116,3 +116,24 @@ reimbRouter.patch('', [
         }
     }
 }]);
+
+reimbRouter.patch('/partial', [
+    authMiddleware(2),
+    async (req, res) => {
+        req.body.resolver = req.session.user.userId;
+    const card = req.body;
+    if (!card) {
+        res.sendStatus(400);
+    } else {
+        console.log('sending to update');
+        const id = await reimbDao.updatePartialReimb(card);
+        if (!id) {
+            res.sendStatus(400);
+        } else {
+            card.id = id;
+            res.status(201);
+            const reimbs = await reimbDao.findByReimbId(card.id);
+            res.json(reimbs);
+        }
+    }
+}]);
