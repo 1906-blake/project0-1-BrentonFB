@@ -81,6 +81,7 @@ usersRouter.patch('/myself', async (req, res) => {
     if (req.session.user && req.session.user.role.roleId) {
         if (req.session.user.userId) {
             req.body.userId = +req.session.user.userId;
+            console.log(req.body);
             const updatedUser = await userDao.updateMyself(req.body);
             const user = await userDao.findById(updatedUser);
             res.json(user);

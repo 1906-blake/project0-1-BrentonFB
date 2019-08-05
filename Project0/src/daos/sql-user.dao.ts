@@ -127,7 +127,7 @@ export async function updateMyself(user: Partial<Users>) {
             WHERE userid = $7
             RETURNING userid
         `;
-        const params = [user.username, user.pass, user.firstName, user.lastName, user.email, user.role, user.userId];
+        const params = [user.username, user.pass, user.firstName, user.lastName, user.email, user.role.roleId, user.userId];
         const result = await client.query(queryString, params);
         return result.rows[0].userid;
     } catch (err) {
