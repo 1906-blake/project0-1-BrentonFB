@@ -160,6 +160,7 @@ export async function updatePartialReimb(card: Partial<Reimbursement>) {
         ...card
     };
     let client: PoolClient;
+    const d = new Date().toLocaleDateString();
     try {
         client = await connectionPool.connect();
         const queryString = `
@@ -168,7 +169,7 @@ export async function updatePartialReimb(card: Partial<Reimbursement>) {
             WHERE reimbursementid = $4
             RETURNING reimbursementid;
         `;
-        const params = [card.dateResolved, card.resolver,
+        const params = [d, card.resolver,
         card.status, card.reimbursementid];
         const result = await client.query(queryString, params);
         return result.rows[0].reimbursementid;
@@ -183,6 +184,7 @@ export async function updatePartialReimb(card: Partial<Reimbursement>) {
 export async function save(card: Partial<Reimbursement>) {
     let client: PoolClient;
     console.log('connected to the save function');
+    const d = new Date().toLocaleDateString();
     try {
         client = await connectionPool.connect(); // basically .then is everything after this
 
@@ -192,7 +194,7 @@ export async function save(card: Partial<Reimbursement>) {
             VALUES ($1, $2, $3, $4, $5)
             RETURNING reimbursementid;
         `;
-        const params = [card.author, card.amount, card.dateSubmitted, card.status, card.type];
+        const params = [card.author, card.amount, d, 1, card.type];
         const result = await client.query(queryString, params);
         return result.rows[0].reimbursementid;
 

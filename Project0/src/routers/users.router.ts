@@ -23,21 +23,26 @@ usersRouter.get('', [
  */
 usersRouter.get('/:id',
     async (req, res) => {
-        if (req.session.user && req.session.user.role.roleId) {
-            if (req.session.user.role.roleId === 1) {
-                const user = await userDao.findById(+req.params.id);
-                res.json(user);
-            } else if (req.session.user.role.roleId === 2) {
-                const user = await userDao.findById(+req.params.id);
-                res.json(user);
+        if (req.session.user) {
+            if (+req.params.id === 0) {
+                const user = await userDao.findById(req.session.user.userId);
+                    res.json(user);
             } else {
-                if (req.session.user.userId && req.session.user.userId === +req.params.id) {
+                if (req.session.user.role.roleId === 1) {
+                    const user = await userDao.findById(+req.params.id);
+                    res.json(user);
+                } else if (req.session.user.role.roleId === 2) {
                     const user = await userDao.findById(+req.params.id);
                     res.json(user);
                 } else {
-                    // 403 means forbidden which means we know who they are
-                    res.status(403);
-                    res.send('Permission Denied');
+                    if (req.session.user.userId && req.session.user.userId === +req.params.id) {
+                        const user = await userDao.findById(+req.params.id);
+                        res.json(user);
+                    } else {
+                        // 403 means forbidden which means we know who they are
+                        res.status(403);
+                        res.send('Permission Denied');
+                    }
                 }
             }
         } else {

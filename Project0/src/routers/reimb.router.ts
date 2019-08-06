@@ -77,10 +77,7 @@ reimbRouter.get('/reimb/author/:reimbId', async (req, res) => {
  * adding a reimbursement to the table
  */
 reimbRouter.post('', async (req, res) => {
-    const d = new Date().toLocaleDateString();
-    req.body.dateSubmitted = d;
     req.body.author = req.session.user.userId;
-    req.body.status = 1;
     const card = req.body;
     if (!card) {
         res.sendStatus(400);
@@ -99,7 +96,7 @@ reimbRouter.post('', async (req, res) => {
 
 /**
  * /reimb
- * partially update a reimbursement
+ * old reimbursement patch
  */
 reimbRouter.patch('', [
     authMiddleware(2),
@@ -121,6 +118,9 @@ reimbRouter.patch('', [
     }
 }]);
 
+/**
+ * partial reimbursement patch
+ */
 reimbRouter.patch('/partial', [
     authMiddleware(2),
     async (req, res) => {

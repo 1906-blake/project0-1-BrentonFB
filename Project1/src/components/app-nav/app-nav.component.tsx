@@ -17,7 +17,7 @@ export class NavComponent extends React.Component {
         <div className="collapse navbar-collapse" id="navbarsExample04">
           <ul className="navbar-nav ml-auto margin-nav">
             <li className="nav-item active">
-              <Link to="/home" className="unset-anchor nav-link">Home</Link>
+              <Link to="/all-users" className="unset-anchor nav-link">All Users</Link>
             </li>
             <li className="nav-item active">
               <Link to="/sign-in" className="unset-anchor nav-link">Sign In</Link>
@@ -44,6 +44,7 @@ export class NavComponent extends React.Component {
                 <div className="dropdown-item"><Link to="/pokemon" className="unset-anchor nav-link active">Pokemon</Link></div>
                 <div className="dropdown-item"><Link to="/cards" className="unset-anchor nav-link active">Cards</Link></div>
                 <div className="dropdown-item"><Link to="/clicker" className="unset-anchor nav-link active">Clicker</Link></div>
+                <div className="dropdown-item"><Link to="/home" className="unset-anchor nav-link active">Home</Link></div>
               </div>
             </li>
             <li className="nav-item active">
