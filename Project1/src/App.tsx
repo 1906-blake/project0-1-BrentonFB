@@ -17,7 +17,7 @@ import Cards from './components/cards/cards.component';
 import Reimbursements from './project-1/components/reimbursements/reimbursements.components';
 import { PostReimbs } from './project-1/components/post-reimbursements/post.reimbs';
 import { PatchReimbs } from './project-1/components/update-reimbs/update.reimbursement';
-import { PatchUser } from './project-1/components/update-user/update.user';
+import { PatchUser } from './project-1/components/update-user/update-user.component';
 
 const App: React.FC = () => {
   return (
