@@ -32,7 +32,7 @@ export default class Reimbursements extends Component<{}, IState> {
     };
 
     getReimbursements = async () => {
-        const resp = await fetch(environment.context +'/reimb/', {
+        const resp = await fetch(environment.context + '/reimb/', {
             credentials: 'include'
         });
         const reimbsFromServer = await resp.json();
@@ -118,6 +118,7 @@ export default class Reimbursements extends Component<{}, IState> {
                 <table className="table table-striped table-dark">
                     <thead>
                         <tr>
+                            <th scope="col">ID</th>
                             <th scope="col">Author</th>
                             <th scope="col">Amount</th>
                             <th scope="col">Type</th>
@@ -131,6 +132,7 @@ export default class Reimbursements extends Component<{}, IState> {
                         {
                             reimbs.map(reimb =>
                                 <tr key={'reimbursementId-'+reimb.reimbursementid}>
+                                    <td>{reimb.reimbursementid}</td>
                                     <td>{reimb.author.firstName}</td>
                                     <td>{reimb.amount}</td>
                                     <td>{reimb.type.type}</td>
