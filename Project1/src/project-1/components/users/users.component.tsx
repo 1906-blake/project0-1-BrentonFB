@@ -29,5 +29,12 @@ export default class Users extends Component<{}, IState> {
         });
     }
 
-    
+    render() {
+        const users = this.state.users;
+        return(
+            <div id="users-table-container">
+                
+            </div>
+        )
+    }
 }
