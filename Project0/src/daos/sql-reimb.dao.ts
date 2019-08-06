@@ -180,7 +180,7 @@ export async function updatePartialReimb(card: Partial<Reimbursement>) {
     return undefined;
 }
 
-export async function save(card: Reimbursement) {
+export async function save(card: Partial<Reimbursement>) {
     let client: PoolClient;
     console.log('connected to the save function');
     try {
@@ -188,13 +188,11 @@ export async function save(card: Reimbursement) {
 
         const queryString = `
         INSERT INTO reimbursement (userid, amount,
-            datesubmitted, dateresolved, resolver,
-            reimbstatusid, reimbtypeid)
-            VALUES ($1, $2, $3, $4, $5, $6, $7)
+            datesubmitted, reimbstatusid, reimbtypeid)
+            VALUES ($1, $2, $3, $4, $5)
             RETURNING reimbursementid;
         `;
-        const params = [card.author, card.amount, card.dateSubmitted, card.dateResolved, card.resolver,
-             card.status, card.type];
+        const params = [card.author, card.amount, card.dateSubmitted, card.status, card.type];
         const result = await client.query(queryString, params);
         return result.rows[0].reimbursementid;
 

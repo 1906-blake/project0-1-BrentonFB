@@ -77,6 +77,8 @@ reimbRouter.get('/reimb/author/:reimbId', async (req, res) => {
  * adding a reimbursement to the table
  */
 reimbRouter.post('', async (req, res) => {
+    req.body.author = req.session.user.userId;
+    req.body.status = 1;
     const card = req.body;
     if (!card) {
         res.sendStatus(400);
