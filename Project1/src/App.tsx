@@ -19,6 +19,7 @@ import { PostReimbs } from './project-1/components/post-reimbursements/post.reim
 import { PatchReimbs } from './project-1/components/update-reimbs/update.reimbursement';
 import { PatchUser } from './project-1/components/update-user/update-user.component';
 import Users from './project-1/components/users/users.component';
+import MyUser from './project-1/components/users/my.users.component';
 
 const App: React.FC = () => {
   return (
@@ -42,6 +43,7 @@ const App: React.FC = () => {
           <Route path="/sign-in" component={SignIn} />
           <Route path="/tic-tac-toe" component={TicTacToe} />
           <Route path="/first" component={FirstComponent} />
+          <Route path="/my-user-info" component={MyUser} />
           <Route path="/all-users" component={Users} />
           <Route component={NotFound} />
         </Switch>
