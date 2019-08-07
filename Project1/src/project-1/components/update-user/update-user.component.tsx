@@ -48,7 +48,7 @@ export class PatchUser extends React.Component<RouteComponentProps, IState> {
             const user = await resp.json();
             console.log(user);
             // localStorage.setItem('user', JSON.stringify(user));
-            this.props.history.push('/reimbursements');
+            this.props.history.push('/my-user-info');
         } catch (err) {
             console.error(err);
             console.log('invalid credentials');
