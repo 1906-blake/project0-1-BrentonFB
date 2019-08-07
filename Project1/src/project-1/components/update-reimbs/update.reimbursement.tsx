@@ -105,7 +105,7 @@ export class PatchReimbs extends React.Component<RouteComponentProps, IState> {
                         }
                     </tbody>
                 </table>
-                <form className="reimb-patch-form" onSubmit={this.submit}>
+                <form className="reimb-patch-form" id="reimb-patch-form"onSubmit={this.submit}>
                     <h1 className="updating title"> Please Enter ID and Status</h1>
                     <label htmlFor="inputReimbursementId" className="number only">Reimbursement ID</label>
                     <input type="number" id="inputReimbursementId"
