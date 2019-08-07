@@ -122,7 +122,7 @@ export class PatchReimbs extends React.Component<RouteComponentProps, IState> {
                         onChange={this.handleChange}
                         value={this.state.resolutioninfo.status} required />
                     {this.state.errorMessage && <p id="error-message">{this.state.errorMessage}</p>}
-                    <button color="success" type="submit">Update Profile</button>
+                    <button color="success" type="submit">Update Reimbursement</button>
                 </form>
             </div>
         );
