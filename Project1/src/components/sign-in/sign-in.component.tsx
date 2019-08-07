@@ -47,7 +47,7 @@ export class SignIn extends React.Component<RouteComponentProps, IState> {
             console.log(user);
     
             localStorage.setItem('user', JSON.stringify(user));
-            this.props.history.push('/reimbursements'); // navigate pages
+            this.props.history.push('/my-user-info'); // navigate pages
         } catch (err) {
             console.log(err);
             console.log('invalid credentials');
